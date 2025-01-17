@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "Add your description here"
 requires-python = ">=3.11"
 dependencies = [
+    "deep-translator>=1.11.4",
     "flask>=3.1.0",
     "requests>=2.32.3",
 ]

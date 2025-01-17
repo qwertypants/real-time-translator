@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify
-import requests
+from deep_translator import GoogleTranslator
 
 app = Flask(__name__)
 
@@ -18,25 +18,19 @@ def translate():
         if not text:
             return jsonify({'translation': ''})
 
-        # Use LibreTranslate API
-        response = requests.post(
-            'https://translate.argosopentech.com/translate',
-            json={
-                'q': text,
-                'source': source_lang,
-                'target': target_lang
-            }
-        )
+        # Convert 'zh' to 'zh-CN' for simplified Chinese
+        # and 'zh-TW' remains as is for traditional Chinese
+        if target_lang == 'zh':
+            target_lang = 'zh-CN'
 
-        if response.status_code == 200:
-            translation = response.json()['translatedText']
-            return jsonify({
-                'translation': translation,
-                'source_text': text
-            })
-        else:
-            return jsonify({'error': 'Translation service error'}), 500
+        # Perform translation using deep_translator
+        translator = GoogleTranslator(source=source_lang, target=target_lang)
+        translation = translator.translate(text)
 
+        return jsonify({
+            'translation': translation,
+            'source_text': text
+        })
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
