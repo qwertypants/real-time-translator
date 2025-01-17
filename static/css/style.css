@@ -25,14 +25,28 @@ body {
     border-radius: 8px;
     background-color: #f8f9fa;
     word-wrap: break-word;
+    transition: all 0.3s ease;
 }
 
 .source-text {
     border-left: 4px solid var(--primary-red);
+    font-size: 16px;
 }
 
 .translation-text {
     border-left: 4px solid var(--primary-cyan);
+    font-size: 16px;
+}
+
+.text-display:empty {
+    min-height: 30px;
+    background-color: #f1f3f5;
+}
+
+.text-display:empty::before {
+    content: 'Type something...';
+    color: #adb5bd;
+    font-style: italic;
 }
 
 .input-section {
@@ -48,11 +62,13 @@ body {
     border-radius: 8px;
     resize: none;
     font-size: 16px;
+    padding: 12px;
 }
 
 .form-control:focus {
     border-color: var(--primary-cyan);
     box-shadow: 0 0 0 0.2rem rgba(0, 255, 255, 0.25);
+    outline: none;
 }
 
 .btn-copy {
@@ -65,10 +81,12 @@ body {
     padding: 5px;
     cursor: pointer;
     transition: all 0.3s ease;
+    opacity: 0.7;
 }
 
 .btn-copy:hover {
     color: var(--primary-cyan);
+    opacity: 1;
 }
 
 /* Toggle Switch Styles */
@@ -77,6 +95,7 @@ body {
     align-items: center;
     justify-content: center;
     gap: 10px;
+    margin-top: 20px;
 }
 
 .toggle-switch {
@@ -133,13 +152,19 @@ input:checked + .toggle-slider:before {
     .translation-container {
         padding: 10px;
     }
-    
+
     .text-display {
         min-height: 50px;
         padding: 10px;
+        font-size: 14px;
     }
-    
+
     .form-control {
         font-size: 14px;
+        padding: 10px;
+    }
+
+    .toggle-label {
+        font-size: 12px;
     }
 }
