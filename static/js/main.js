@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const inputText = document.getElementById('inputText');
     const sourceText = document.getElementById('sourceText');
     const translationText = document.getElementById('translationText');
+    const pronunciationGuide = document.getElementById('pronunciationGuide');
     const copyButton = document.getElementById('copyButton');
     const chineseVariantToggle = document.getElementById('chineseVariantToggle');
     const toggleLabel = document.getElementById('toggleLabel');
@@ -37,6 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!text.trim()) {
             sourceText.textContent = '';
             translationText.textContent = '';
+            pronunciationGuide.textContent = '';
             updateCharacterCount('', sourceCount);
             updateCharacterCount('', translationCount);
             return;
@@ -44,6 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Show loading state
         translationText.textContent = 'Translating...';
+        pronunciationGuide.textContent = '';
 
         try {
             const response = await fetch('/translate', {
@@ -65,14 +68,17 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.json();
             if (data.error) {
                 translationText.textContent = 'Translation error occurred';
+                pronunciationGuide.textContent = '';
                 console.error('Translation error:', data.error);
                 return;
             }
 
             translationText.textContent = data.translation;
+            pronunciationGuide.textContent = data.pronunciation;
             updateCharacterCount(data.translation, translationCount);
         } catch (error) {
             translationText.textContent = 'Translation service unavailable';
+            pronunciationGuide.textContent = '';
             console.error('Translation request failed:', error);
         }
     }
