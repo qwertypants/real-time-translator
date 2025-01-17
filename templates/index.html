@@ -12,11 +12,17 @@
     <div class="container">
         <div class="translation-container">
             <!-- Source Text Display -->
-            <div class="text-display source-text" id="sourceText"></div>
-            
+            <div class="text-section">
+                <div class="text-display source-text" id="sourceText"></div>
+                <div class="char-count" id="sourceCount">0 characters</div>
+            </div>
+
             <!-- Translation Display -->
-            <div class="text-display translation-text" id="translationText"></div>
-            
+            <div class="text-section">
+                <div class="text-display translation-text" id="translationText"></div>
+                <div class="char-count" id="translationCount">0 characters</div>
+            </div>
+
             <!-- Input Section -->
             <div class="input-section">
                 <div class="input-group">
@@ -26,7 +32,7 @@
                         <i data-feather="copy"></i>
                     </button>
                 </div>
-                
+
                 <!-- Language Toggle -->
                 <div class="language-toggle">
                     <label class="toggle-switch">

@@ -168,3 +168,18 @@ input:checked + .toggle-slider:before {
         font-size: 12px;
     }
 }
+
+/* Add these new styles after the existing .text-display styles */
+.text-section {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.char-count {
+    position: absolute;
+    right: 0;
+    bottom: -20px;
+    font-size: 12px;
+    color: #6c757d;
+    font-style: italic;
+}

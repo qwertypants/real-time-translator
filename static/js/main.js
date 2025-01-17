@@ -9,9 +9,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const copyButton = document.getElementById('copyButton');
     const chineseVariantToggle = document.getElementById('chineseVariantToggle');
     const toggleLabel = document.getElementById('toggleLabel');
+    const sourceCount = document.getElementById('sourceCount');
+    const translationCount = document.getElementById('translationCount');
 
     let translateTimeout;
     let currentTarget = 'zh'; // Default to simplified Chinese
+
+    // Update character counts
+    function updateCharacterCount(text, countElement) {
+        const count = text ? text.length : 0;
+        countElement.textContent = `${count} characters`;
+    }
 
     // Update toggle label
     function updateToggleLabel() {
@@ -21,6 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Update source text immediately
     function updateSourceText(text) {
         sourceText.textContent = text || '';
+        updateCharacterCount(text, sourceCount);
     }
 
     // Translation function
@@ -28,6 +37,8 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!text.trim()) {
             sourceText.textContent = '';
             translationText.textContent = '';
+            updateCharacterCount('', sourceCount);
+            updateCharacterCount('', translationCount);
             return;
         }
 
@@ -59,6 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             translationText.textContent = data.translation;
+            updateCharacterCount(data.translation, translationCount);
         } catch (error) {
             translationText.textContent = 'Translation service unavailable';
             console.error('Translation request failed:', error);
@@ -106,6 +118,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Initialize toggle label
+    // Initialize toggle label and character counts
     updateToggleLabel();
+    updateCharacterCount('', sourceCount);
+    updateCharacterCount('', translationCount);
 });
