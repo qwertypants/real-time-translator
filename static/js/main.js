@@ -12,9 +12,61 @@ document.addEventListener('DOMContentLoaded', function() {
     const toggleLabel = document.getElementById('toggleLabel');
     const sourceCount = document.getElementById('sourceCount');
     const translationCount = document.getElementById('translationCount');
+    const playSourceButton = document.getElementById('playSourceButton');
+    const playTranslationButton = document.getElementById('playTranslationButton');
 
     let translateTimeout;
     let currentTarget = 'zh'; // Default to simplified Chinese
+    let currentAudio = null;
+
+    // Audio playback function
+    async function playAudio(text, lang) {
+        // Stop any currently playing audio
+        if (currentAudio) {
+            currentAudio.pause();
+            currentAudio = null;
+        }
+
+        if (!text.trim()) return;
+
+        try {
+            // For English, use Web Speech API
+            if (lang === 'en') {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                window.speechSynthesis.speak(utterance);
+                return;
+            }
+
+            // For Chinese, use server-side TTS
+            const response = await fetch('/speak', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    text: text,
+                    lang: lang === 'zh-TW' ? 'zh-tw' : 'zh-cn'
+                })
+            });
+
+            if (!response.ok) throw new Error('Audio generation failed');
+
+            const blob = await response.blob();
+            const audioUrl = URL.createObjectURL(blob);
+            currentAudio = new Audio(audioUrl);
+
+            // Clean up after playback
+            currentAudio.onended = () => {
+                URL.revokeObjectURL(audioUrl);
+                currentAudio = null;
+            };
+
+            currentAudio.play();
+        } catch (error) {
+            console.error('Audio playback failed:', error);
+        }
+    }
 
     // Update character counts
     function updateCharacterCount(text, countElement) {
@@ -82,6 +134,17 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Translation request failed:', error);
         }
     }
+
+    // Audio button handlers
+    playSourceButton.addEventListener('click', function() {
+        const text = sourceText.textContent;
+        if (text) playAudio(text, 'en');
+    });
+
+    playTranslationButton.addEventListener('click', function() {
+        const text = translationText.textContent;
+        if (text) playAudio(text, currentTarget);
+    });
 
     // Input event handler with debouncing
     inputText.addEventListener('input', function() {

@@ -28,10 +28,17 @@ body {
     border-radius: 12px;
 }
 
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-unit);
+}
+
 .section-title {
     font-size: 1.2rem;
     color: var(--primary-black);
-    margin-bottom: var(--spacing-unit);
+    margin-bottom: 0;
     font-weight: 600;
 }
 
@@ -202,4 +209,40 @@ input:checked + .toggle-slider:before {
     font-size: 12px;
     color: #6c757d;
     font-style: italic;
+}
+
+.btn-audio {
+    background: none;
+    border: none;
+    color: var(--primary-black);
+    padding: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0.7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-audio:hover {
+    color: var(--primary-cyan);
+    opacity: 1;
+}
+
+.btn-audio.playing {
+    color: var(--primary-cyan);
+    opacity: 1;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
 }

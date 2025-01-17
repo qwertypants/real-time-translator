@@ -13,14 +13,24 @@
         <div class="translation-container">
             <!-- Source Text Display -->
             <div class="text-section">
-                <h3 class="section-title">English</h3>
+                <div class="section-header">
+                    <h3 class="section-title">English</h3>
+                    <button class="btn btn-audio" id="playSourceButton" title="Play audio">
+                        <i data-feather="volume-2"></i>
+                    </button>
+                </div>
                 <div class="text-display source-text" id="sourceText"></div>
                 <div class="char-count" id="sourceCount">0 characters</div>
             </div>
 
             <!-- Translation Display -->
             <div class="text-section">
-                <h3 class="section-title">Chinese</h3>
+                <div class="section-header">
+                    <h3 class="section-title">Chinese</h3>
+                    <button class="btn btn-audio" id="playTranslationButton" title="Play audio">
+                        <i data-feather="volume-2"></i>
+                    </button>
+                </div>
                 <div class="pronunciation-guide" id="pronunciationGuide"></div>
                 <div class="text-display translation-text" id="translationText"></div>
                 <div class="char-count" id="translationCount">0 characters</div>

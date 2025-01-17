@@ -1,6 +1,9 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_file
 from deep_translator import GoogleTranslator
 from pypinyin import pinyin, Style
+from gtts import gTTS
+import os
+import tempfile
 import re
 
 app = Flask(__name__)
@@ -21,6 +24,13 @@ def generate_pronunciation(text, is_traditional):
         pinyins = pinyin(text, style=Style.TONE)
 
     return ' '.join([p[0] for p in pinyins])
+
+def generate_audio(text, lang='zh-cn'):
+    # Create a temporary file for the audio
+    temp_file = tempfile.NamedTemporaryFile(suffix='.mp3', delete=False)
+    tts = gTTS(text=text, lang=lang)
+    tts.save(temp_file.name)
+    return temp_file.name
 
 @app.route('/')
 def index():
@@ -54,6 +64,31 @@ def translate():
             'pronunciation': pronunciation,
             'source_text': text
         })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/speak', methods=['POST'])
+def speak():
+    try:
+        data = request.get_json()
+        text = data.get('text', '')
+        lang = data.get('lang', 'en')
+
+        # Generate audio file
+        audio_file = generate_audio(text, lang)
+
+        # Send the file and then clean up
+        response = send_file(
+            audio_file,
+            mimetype='audio/mpeg'
+        )
+
+        # Delete the temporary file after sending
+        @response.call_on_close
+        def cleanup():
+            os.unlink(audio_file)
+
+        return response
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
