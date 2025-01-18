@@ -14,71 +14,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const translationCount = document.getElementById('translationCount');
     const playSourceButton = document.getElementById('playSourceButton');
     const playTranslationButton = document.getElementById('playTranslationButton');
-    const shareButton = document.getElementById('shareButton');
-    const shareModal = new bootstrap.Modal(document.getElementById('shareModal'));
-    const shareUrl = document.getElementById('shareUrl');
-    const copyShareButton = document.getElementById('copyShareButton');
 
     let translateTimeout;
     let currentTarget = 'zh'; // Default to simplified Chinese
     let currentAudio = null;
-
-    // Check for shared translation data
-    const sharedData = {{ shared_data | tojson | safe if shared_data else 'null' }};
-    if (sharedData) {
-        inputText.value = sharedData.source_text;
-        sourceText.textContent = sharedData.source_text;
-        translationText.textContent = sharedData.translation;
-        pronunciationGuide.textContent = sharedData.pronunciation;
-        updateCharacterCount(sharedData.source_text, sourceCount);
-        updateCharacterCount(sharedData.translation, translationCount);
-    }
-
-    // Share button handler
-    shareButton.addEventListener('click', async function() {
-        const text = sourceText.textContent;
-        const translation = translationText.textContent;
-        const pronunciation = pronunciationGuide.textContent;
-
-        if (!text || !translation) return;
-
-        try {
-            const response = await fetch('/share', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    source_text: text,
-                    translation: translation,
-                    pronunciation: pronunciation
-                })
-            });
-
-            if (!response.ok) throw new Error('Share request failed');
-
-            const data = await response.json();
-            shareUrl.value = data.share_url;
-            shareModal.show();
-        } catch (error) {
-            console.error('Share failed:', error);
-        }
-    });
-
-    // Copy share URL button handler
-    copyShareButton.addEventListener('click', async function() {
-        try {
-            await navigator.clipboard.writeText(shareUrl.value);
-            copyShareButton.innerHTML = '<i data-feather="check"></i> Copied!';
-            feather.replace();
-            setTimeout(() => {
-                copyShareButton.innerHTML = '<i data-feather="copy"></i> Copy';
-                feather.replace();
-            }, 2000);
-        } catch (err) {
-            console.error('Failed to copy URL:', err);
-        }
-    });
 
     // Audio playback function
     async function playAudio(text, lang) {
@@ -230,7 +169,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Copy button handler
     copyButton.addEventListener('click', async function() {
-        const textToCopy = sourceText.textContent && translationText.textContent ?
+        const textToCopy = sourceText.textContent && translationText.textContent ? 
             `${sourceText.textContent}\n${translationText.textContent}` : '';
 
         if (!textToCopy) return;
