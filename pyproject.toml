@@ -9,4 +9,5 @@ dependencies = [
     "gtts>=2.5.4",
     "pypinyin>=0.53.0",
     "requests>=2.32.3",
+    "gunicorn>=21.2.0",
 ]
