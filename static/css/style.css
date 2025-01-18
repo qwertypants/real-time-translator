@@ -95,9 +95,9 @@ body {
     border-radius: 8px;
     resize: none;
     font-size: 16px;
-    /*padding: 12px;*/
     padding: calc(var(--spacing-unit) * 0.5);
-    width: 77%;
+    width: 100%;
+    margin-top: 10px;
 }
 
 .form-control:focus {
