@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function() {
         clearTimeout(translateTimeout);
         translateTimeout = setTimeout(() => {
             translateText(this.value);
-        }, 300); // Wait 300ms after last keystroke before translating
+        }, 800); // Wait 300ms after last keystroke before translating
     });
 
     // Chinese variant toggle handler
