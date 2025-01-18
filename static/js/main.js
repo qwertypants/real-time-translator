@@ -7,7 +7,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const sourceText = document.getElementById('sourceText');
     const translationText = document.getElementById('translationText');
     const pronunciationGuide = document.getElementById('pronunciationGuide');
-    const copyButton = document.getElementById('copyButton');
+    const copySourceButton = document.getElementById('copySourceButton');
+    const copyTranslationButton = document.getElementById('copyTranslationButton');
     const chineseVariantToggle = document.getElementById('chineseVariantToggle');
     const toggleLabel = document.getElementById('toggleLabel');
     const sourceCount = document.getElementById('sourceCount');
@@ -167,25 +168,39 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Copy button handler
-    copyButton.addEventListener('click', async function() {
-        const textToCopy = sourceText.textContent && translationText.textContent ? 
-            `${sourceText.textContent}\n${translationText.textContent}` : '';
-
+    // Copy button handlers
+    copySourceButton.addEventListener('click', async function() {
+        const textToCopy = sourceText.textContent;
         if (!textToCopy) return;
 
         try {
             await navigator.clipboard.writeText(textToCopy);
-
             // Visual feedback
-            copyButton.style.color = 'var(--primary-cyan)';
+            copySourceButton.style.color = 'var(--primary-cyan)';
             setTimeout(() => {
-                copyButton.style.color = 'var(--primary-black)';
+                copySourceButton.style.color = 'var(--primary-black)';
             }, 1000);
         } catch (err) {
-            console.error('Failed to copy text:', err);
+            console.error('Failed to copy source text:', err);
         }
     });
+
+    copyTranslationButton.addEventListener('click', async function() {
+        const textToCopy = translationText.textContent;
+        if (!textToCopy) return;
+
+        try {
+            await navigator.clipboard.writeText(textToCopy);
+            // Visual feedback
+            copyTranslationButton.style.color = 'var(--primary-cyan)';
+            setTimeout(() => {
+                copyTranslationButton.style.color = 'var(--primary-black)';
+            }, 1000);
+        } catch (err) {
+            console.error('Failed to copy translation text:', err);
+        }
+    });
+
 
     // Initialize toggle label and character counts
     updateToggleLabel();
