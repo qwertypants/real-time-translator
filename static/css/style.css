@@ -246,3 +246,66 @@ input:checked + .toggle-slider:before {
         transform: scale(1);
     }
 }
+
+.button-group {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-share {
+    background: none;
+    border: none;
+    color: var(--primary-black);
+    padding: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0.7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-share:hover {
+    color: var(--primary-cyan);
+    opacity: 1;
+}
+
+/* Modal styles */
+.modal-content {
+    background-color: var(--primary-white);
+    border-radius: 12px;
+    border: none;
+}
+
+.modal-header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 1rem 1.5rem;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.modal-title {
+    color: var(--primary-black);
+    font-weight: 600;
+}
+
+#shareUrl {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    padding: 0.5rem;
+    font-size: 14px;
+}
+
+#copyShareButton {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0.5rem 1rem;
+}
+
+#copyShareButton i {
+    width: 16px;
+    height: 16px;
+}

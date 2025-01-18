@@ -1,12 +1,30 @@
-from flask import Flask, render_template, request, jsonify, send_file
+from flask import Flask, render_template, request, jsonify, send_file, url_for, redirect
 from deep_translator import GoogleTranslator
 from pypinyin import pinyin, Style
 from gtts import gTTS
 import os
 import tempfile
 import re
+import sqlite3
+from datetime import datetime
+import uuid
 
 app = Flask(__name__)
+
+# Database initialization
+def init_db():
+    conn = sqlite3.connect('translations.db')
+    c = conn.cursor()
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS translations
+        (id TEXT PRIMARY KEY,
+         source_text TEXT NOT NULL,
+         translation TEXT NOT NULL,
+         pronunciation TEXT,
+         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
+    ''')
+    conn.commit()
+    conn.close()
 
 def add_pinyin(text):
     # Generate pinyin with tone marks
@@ -34,6 +52,22 @@ def generate_audio(text, lang='zh-cn'):
 
 @app.route('/')
 def index():
+    # Get share_id from query parameters
+    share_id = request.args.get('share')
+    if share_id:
+        conn = sqlite3.connect('translations.db')
+        c = conn.cursor()
+        c.execute('SELECT source_text, translation, pronunciation FROM translations WHERE id = ?', (share_id,))
+        result = c.fetchone()
+        conn.close()
+
+        if result:
+            return render_template('index.html', shared_data={
+                'source_text': result[0],
+                'translation': result[1],
+                'pronunciation': result[2]
+            })
+
     return render_template('index.html')
 
 @app.route('/translate', methods=['POST'])
@@ -67,6 +101,32 @@ def translate():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route('/share', methods=['POST'])
+def share():
+    try:
+        data = request.get_json()
+        source_text = data.get('source_text', '')
+        translation = data.get('translation', '')
+        pronunciation = data.get('pronunciation', '')
+
+        if not source_text or not translation:
+            return jsonify({'error': 'Missing required data'}), 400
+
+        # Generate unique ID for the share
+        share_id = str(uuid.uuid4())[:8]
+
+        conn = sqlite3.connect('translations.db')
+        c = conn.cursor()
+        c.execute('INSERT INTO translations (id, source_text, translation, pronunciation) VALUES (?, ?, ?, ?)',
+                 (share_id, source_text, translation, pronunciation))
+        conn.commit()
+        conn.close()
+
+        share_url = url_for('index', share=share_id, _external=True)
+        return jsonify({'share_url': share_url})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 @app.route('/speak', methods=['POST'])
 def speak():
     try:
@@ -91,6 +151,9 @@ def speak():
         return response
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+# Initialize database when the app starts
+init_db()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
