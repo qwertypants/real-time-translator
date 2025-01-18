@@ -201,6 +201,26 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Input section copy button handler
+    document.querySelector('.input-group .btn-copy').addEventListener('click', async function() {
+        const inputValue = inputText.value.trim();
+        if (!inputValue) return;
+
+        const translation = translationText.textContent.trim();
+        const combinedText = `${inputValue}\n${translation}`;
+
+        try {
+            await navigator.clipboard.writeText(combinedText);
+            // Visual feedback
+            this.style.color = 'var(--primary-cyan)';
+            setTimeout(() => {
+                this.style.color = 'var(--primary-black)';
+            }, 1000);
+        } catch (err) {
+            console.error('Failed to copy text:', err);
+        }
+    });
+
 
     // Initialize toggle label and character counts
     updateToggleLabel();
