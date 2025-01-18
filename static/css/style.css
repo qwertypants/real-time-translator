@@ -41,6 +41,10 @@ body {
     font-weight: 600;
 }
 
+.section-title:empty::before {
+    content: "Chinese";
+}
+
 .pronunciation-guide {
     font-size: 0.9rem;
     color: #666;
