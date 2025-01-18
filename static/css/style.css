@@ -10,21 +10,18 @@ body {
     background-color: var(--primary-white);
     color: var(--primary-black);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    padding: 0;
+    padding: 0.5em;
     line-height: 1.6;
 }
 
 .translation-container {
     max-width: 800px;
     margin: 0 auto;
-    padding: calc(var(--spacing-unit) * 2);
 }
 
 .text-section {
     position: relative;
     margin-bottom: calc(var(--spacing-unit) * 3);
-    /*padding: var(--spacing-unit);*/
-    background-color: rgba(248, 249, 250, 0.5);
     border-radius: 12px;
 }
 
@@ -95,9 +92,9 @@ body {
     border-radius: 8px;
     resize: none;
     font-size: 16px;
-    padding: calc(var(--spacing-unit) * 0.5);
-    width: 100%;
-    margin-top: 10px;
+    padding: 10px;
+    width: 97%;
+    margin-top: 20px;
 }
 
 .form-control:focus {
@@ -185,20 +182,15 @@ input:checked + .toggle-slider:before {
 }
 
 @media (max-width: 576px) {
-    .translation-container {
-        padding: 10px;
+
+    .form-control {
+        width: 90%
     }
 
     .text-display {
         min-height: 50px;
         padding: 10px;
         /*font-size: 14px;*/
-    }
-
-    .form-control {
-        /*font-size: 14px;*/
-        /*padding: 10px;*/
-
     }
 
     .toggle-label {
@@ -276,6 +268,9 @@ input:checked + .toggle-slider:before {
     opacity: 1;
 }
 
+#copyButton {
+    top: -25%;
+}
 #copyButton,
 #copyTranslationButton {
     font-size:1.5em;
