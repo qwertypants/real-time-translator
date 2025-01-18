@@ -1,7 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize Feather icons
-    feather.replace();
-
     // DOM elements
     const inputText = document.getElementById('inputText');
     const sourceText = document.getElementById('sourceText');
